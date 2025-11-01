@@ -1,4 +1,4 @@
-# 7702 MM Scavenger
+# Metamask Smart-Account Scavenger
 
 An experimental Next.js application that demonstrates how to migrate a MetaMask externally owned account (EOA) to a smart account (EIP-7702) and execute atomic, gas-efficient batch transfers. The UI focuses on auditing wallet assets, generating pre-checked transactions, and submitting them through MetaMask’s Smart Account tooling.
 
