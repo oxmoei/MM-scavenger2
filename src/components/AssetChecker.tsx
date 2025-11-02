@@ -347,7 +347,7 @@ export default function AssetChecker({ onGenerateTransactions, language = 'en' }
     
     // 使用硬编码 gasPrice(Gwei) 并加 20% buffer
     const chainGasPriceGwei: Record<number, number> = {
-      1: 3,           // Ethereum
+      1: 4,           // Ethereum
       137: 60,        // Polygon
       56: 0.25,        // BSC
       42161: 0.08,     // Arbitrum

@@ -263,7 +263,14 @@ export default function Home() {
       sent: truncatedTransactions.length
     });
 
+    if (!chainId) {
+      console.error("发送批量交易失败：缺少链 ID");
+      setStatusError("当前网络信息缺失，请重新连接钱包后再试。");
+      return;
+    }
+
     sendCalls({
+      chainId,
       calls,
     });
   };
