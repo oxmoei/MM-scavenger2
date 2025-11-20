@@ -251,7 +251,7 @@ export default function AssetChecker({ onGenerateTransactions, language = 'en' }
   const t = assetCheckerTexts[language];
   const { address, isConnected } = useAccount();
   const chainId = useChainId();
-  const { data: balanceData } = useBalance({ address });
+  const { data: balanceData } = useBalance({ address, chainId });
   const [assets, setAssets] = useState<Asset[]>([]);
   const [nativeBalance, setNativeBalance] = useState<string>('0');
   const [loading, setLoading] = useState(false);
@@ -325,8 +325,11 @@ export default function AssetChecker({ onGenerateTransactions, language = 'en' }
 
   // 监听原生代币余额变化
   useEffect(() => {
-    if (balanceData?.value) {
+    if (balanceData?.value !== undefined) {
       setNativeBalance(balanceData.value.toString());
+    } else if (balanceData) {
+      // 即使 value 为 undefined，也尝试设置为 0
+      setNativeBalance('0');
     }
   }, [balanceData]);
 
@@ -854,7 +857,7 @@ export default function AssetChecker({ onGenerateTransactions, language = 'en' }
           </p>
           <div className="space-y-2 max-h-64 overflow-y-auto px-2 sm:px-4 md:px-8">
             {/* 原生代币（仅在查询资产详情后显示） */}
-            {isConnected && balanceData && hasQueriedAssets && (
+            {isConnected && hasQueriedAssets && balanceData && (
               <div className="flex items-center justify-between p-2 sm:p-2.5 bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 gap-2">
                 <div className="flex items-center gap-1.5 sm:gap-2 min-w-0 flex-1">
                   {/* 原生代币复选框 */}
