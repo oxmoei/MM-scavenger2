@@ -34,8 +34,18 @@ An experimental Next.js application that demonstrates how to migrate a MetaMask 
 # 1. Install dependencies
 bun install
 
-# 2. (Optional) create a .env file
-echo "NEXT_PUBLIC_INFURA_API_KEY=your_infura_project_id" >> .env.local
+# 2. (Recommended) create a .env.local file for public runtime config
+cat >> .env.local << 'EOF'
+# Wallet RPC (optional)
+NEXT_PUBLIC_INFURA_API_KEY=your_infura_project_id
+
+# Moralis API (required for asset queries)
+# Use either a single primary key, or provide both primary/fallback.
+NEXT_PUBLIC_MORALIS_API_KEY=your_moralis_api_key
+# or:
+# NEXT_PUBLIC_MORALIS_PRIMARY_API_KEY=your_primary_key
+# NEXT_PUBLIC_MORALIS_FALLBACK_API_KEY=your_fallback_key
+EOF
 
 # 3. Launch the dev server
 bun run dev
@@ -74,14 +84,18 @@ The UI guides you through connecting MetaMask, selecting a supported chain (Ethe
 
 - **RPC configuration** – Update `src/providers/AppProvider.tsx` to add or remove supported chains or swap out RPC transports.
 - **Gas defaults** – `AssetChecker` contains chain-specific gas price heuristics you can adjust to match production requirements.
-- **Moralis integration** – The Asset Checker fetches ERC-20 balances using pre-configured API keys. Replace these with environment-managed secrets for production.
+- **Moralis integration** – The Asset Checker reads API keys from environment variables:
+  - `NEXT_PUBLIC_MORALIS_API_KEY` (single key) or
+  - `NEXT_PUBLIC_MORALIS_PRIMARY_API_KEY` and `NEXT_PUBLIC_MORALIS_FALLBACK_API_KEY`
 - **Target address** – The batch transfer currently uses a hard-coded recipient. Wire the “Transfer to Address” input into the transaction generator if you need dynamic targets.
 
 ## Deployment
 
 1. Run `bun run build` to generate the production bundle in `.next/`.
 2. Serve with `bun run start` (defaults to port 3000) or deploy to any Next.js-compatible host (Vercel, Netlify, Fly.io, etc.).
-3. Ensure environment variables (`NEXT_PUBLIC_INFURA_API_KEY`, Moralis keys) are configured in your hosting provider.
+3. Ensure environment variables are configured in your hosting provider:
+   - `NEXT_PUBLIC_INFURA_API_KEY` (optional)
+   - `NEXT_PUBLIC_MORALIS_API_KEY` or both `NEXT_PUBLIC_MORALIS_PRIMARY_API_KEY` and `NEXT_PUBLIC_MORALIS_FALLBACK_API_KEY`
 
 ## Troubleshooting
 
